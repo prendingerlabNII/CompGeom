@@ -43,6 +43,12 @@ import compgeom.util.parser.LineParser;
 public final class RLine2D implements RCGObject {
 
     /**
+     *
+     */
+    private static final long serialVersionUID = -1074596743055479088L;
+
+
+    /**
      * the slope of this line.
      */
     public final Rational slope;
@@ -242,8 +248,8 @@ public final class RLine2D implements RCGObject {
      * @param asDegrees if <code>true</code>, the angle is returned in
      *                  degrees else in radians.
      * @return the angle between this line and the x axis either
-     *         in degrees, or in radians, depending on
-     *         <code>asDegrees</code>.
+     * in degrees, or in radians, depending on
+     * <code>asDegrees</code>.
      */
     public double angle(boolean asDegrees) {
         double radians = Math.atan(this.slope.doubleValue());
@@ -313,8 +319,8 @@ public final class RLine2D implements RCGObject {
      *
      * @param o the other line.
      * @return <code>true</code> iff <code>o</code> is a <code>RLine2D</code>
-     *         and if <code>this.slope</code> equals <code>that.slope</code> and
-     *         <code>this.constant</code> equals <code>that.constant</code>.
+     * and if <code>this.slope</code> equals <code>that.slope</code> and
+     * <code>this.constant</code> equals <code>that.constant</code>.
      */
     @Override
     public boolean equals(Object o) {
@@ -329,22 +335,11 @@ public final class RLine2D implements RCGObject {
      * <code>(slope.hashCode()*23) ^ (constant.hashCode()*37)</code>.
      *
      * @return a pre-calculated hash code:
-     *         <code>(slope.hashCode()*23) ^ (constant.hashCode()*37)</code>.
+     * <code>(slope.hashCode()*23) ^ (constant.hashCode()*37)</code>.
      */
     @Override
     public int hashCode() {
         return hash;
-    }
-
-    /**
-     * Returns a horizontal line that passes the y-axis through <code>y</code>.
-     *
-     * @param y the value to which to go through the y-axis.
-     * @return a horizontal line that passes the y-axis through <code>y</code>.
-     */
-    public static RLine2D horizontal(Rational y) {
-        RPoint2D p = new RPoint2D(Rational.ZERO, y);
-        return new RLine2D(p, p.translate(1, 0));
     }
 
     /**
@@ -353,8 +348,8 @@ public final class RLine2D implements RCGObject {
      *
      * @param that the other line.
      * @return the intersection point of two lines <code>this</code>
-     *         and <code>that</code>. If no intersection exists
-     *         <code>null</code> is returned.
+     * and <code>that</code>. If no intersection exists
+     * <code>null</code> is returned.
      */
     public RPoint2D intersection(RLine2D that) {
         if (this.slope.equals(that.slope)) {
@@ -373,7 +368,7 @@ public final class RLine2D implements RCGObject {
      *
      * @param segment the line segment.
      * @return the intersection point of this line and a given line segment,
-     *         if it exists.
+     * if it exists.
      */
     public RPoint2D intersection(RLineSegment2D segment) {
         return segment.intersection(this);
@@ -385,7 +380,7 @@ public final class RLine2D implements RCGObject {
      *
      * @param that the other line.
      * @return <code>true</code> iff <code>this</code> and <code>that</code>
-     *         line intersect.
+     * line intersect.
      */
     public boolean intersects(RLine2D that) {
         return !this.slope.equals(that.slope);
@@ -397,7 +392,7 @@ public final class RLine2D implements RCGObject {
      *
      * @param that the line segment.
      * @return <code>true</code> iff <code>this</code> and <code>that</code> line
-     *         segment intersect.
+     * segment intersect.
      */
     public boolean intersects(RLineSegment2D that) {
         return that.intersects(this);
@@ -427,7 +422,7 @@ public final class RLine2D implements RCGObject {
      *
      * @param that the other line.
      * @return <code>true</code> iff <code>this</code> line and
-     *         <code>that</code> line are parallel to each other.
+     * <code>that</code> line are parallel to each other.
      */
     public boolean isParallelTo(RLine2D that) {
         return this.slope.equals(that.slope);
@@ -439,8 +434,8 @@ public final class RLine2D implements RCGObject {
      *
      * @param that the other line.
      * @return <code>true</code> iff <code>this</code> line and
-     *         <code>that</code> line are perpendicular to each
-     *         other.
+     * <code>that</code> line are perpendicular to each
+     * other.
      */
     public boolean isPerpendicularTo(RLine2D that) {
         if (this.isVertical()) {
@@ -467,7 +462,7 @@ public final class RLine2D implements RCGObject {
      *
      * @param p the point through which the perpendicular line must go.
      * @return a new line perpendicular to <code>this</code> going
-     *         through a given point <code>p</code>.
+     * through a given point <code>p</code>.
      */
     public RLine2D perpendicularLine(RPoint2D p) {
         if (this.isHorizontal()) {
@@ -487,8 +482,8 @@ public final class RLine2D implements RCGObject {
      *
      * @param that the other line.
      * @return the tangent of the degrees, <code>theta</code>, between two lines
-     *         with gradients <code>m1</code> (<code>this.slope</code>) and <code>m2</code>
-     *         (<code>that.slope</code>): <code>tan(theta) = (m1 - m2)/(1 + (m1*m2))</code>.
+     * with gradients <code>m1</code> (<code>this.slope</code>) and <code>m2</code>
+     * (<code>that.slope</code>): <code>tan(theta) = (m1 - m2)/(1 + (m1*m2))</code>.
      */
     public Rational tangent(RLine2D that) {
         if (this.isParallelTo(that)) {
@@ -509,21 +504,9 @@ public final class RLine2D implements RCGObject {
             if (this.isPerpendicularTo(that)) {
                 return Rational.MINUS_ONE;
             } else {
-                return this.slope.subtract(that.slope).divide(
-                        Rational.ONE.add(this.slope.multiply(that.slope)));
+                return this.slope.subtract(that.slope).divide(Rational.ONE.add(this.slope.multiply(that.slope)));
             }
         }
-    }
-
-    /**
-     * Returns a vertical line that passes the x-axis through <code>x</code>.
-     *
-     * @param x the value to which to go through the x-axis.
-     * @return a vertical line that passes the x-axis through <code>x</code>.
-     */
-    public static RLine2D vertical(Rational x) {
-        RPoint2D p = new RPoint2D(x, Rational.ZERO);
-        return new RLine2D(p, p.translate(0, 1));
     }
 
     /**
@@ -560,13 +543,13 @@ public final class RLine2D implements RCGObject {
 
         return builder.toString();
     }
-    
+
     /**
      * Calculates the x-intercept point of this line: <code>-constant / slope</code>.
      *
      * @return the x-intercept point of this line: <code>-constant / slope</code>, or
-     *         <code>null</code> if the slope of this line equals 0
-     *         (a horizontal line).
+     * <code>null</code> if the slope of this line equals 0
+     * (a horizontal line).
      */
     public Rational xIntercept() {
         if (this.isHorizontal()) {
@@ -599,7 +582,7 @@ public final class RLine2D implements RCGObject {
      * Calculates the y-intercept of this line.
      *
      * @return the y-intercept of this line, or <code>null</code>
-     *         if the slope of this line is infinite (a vertical line).
+     * if the slope of this line is infinite (a vertical line).
      */
     public Rational yIntercept() {
         if (this.isVertical()) {
@@ -615,9 +598,46 @@ public final class RLine2D implements RCGObject {
      *
      * @param xInt the x-intercept.
      * @return the y-intercept of this line, given the x-intercept,
-     *         <code>xInt</code>: <code>((slope*xInt) + constant)</code>.
+     * <code>xInt</code>: <code>((slope*xInt) + constant)</code>.
      */
     private Rational yIntercept(Rational xInt) {
         return this.slope.multiply(xInt).add(this.constant);
+    }
+
+    /**
+     * CLONE
+     */
+    public RLine2D clone() {
+        RLine2D clone = null;
+        try {
+            clone = (RLine2D) super.clone();
+            //			clone.slope = slope.clone();
+
+        } catch (CloneNotSupportedException cns) {
+            cns.printStackTrace();
+        }
+        return clone;
+    }
+
+    /**
+     * Returns a horizontal line that passes the y-axis through <code>y</code>.
+     *
+     * @param y the value to which to go through the y-axis.
+     * @return a horizontal line that passes the y-axis through <code>y</code>.
+     */
+    public static RLine2D horizontal(Rational y) {
+        RPoint2D p = new RPoint2D(Rational.ZERO, y);
+        return new RLine2D(p, p.translate(1, 0));
+    }
+
+    /**
+     * Returns a vertical line that passes the x-axis through <code>x</code>.
+     *
+     * @param x the value to which to go through the x-axis.
+     * @return a vertical line that passes the x-axis through <code>x</code>.
+     */
+    public static RLine2D vertical(Rational x) {
+        RPoint2D p = new RPoint2D(x, Rational.ZERO);
+        return new RLine2D(p, p.translate(0, 1));
     }
 }

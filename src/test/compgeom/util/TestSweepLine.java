@@ -29,14 +29,14 @@
  */
 package compgeom.util;
 
-import compgeom.Rational;
-import compgeom.RLineSegment2D;
-import compgeom.RPoint2D;
+import static org.junit.Assert.assertTrue;
+
+import java.util.HashSet;
+import java.util.Set;
+
 import org.junit.Test;
 
-import java.util.*;
-
-import static org.junit.Assert.*;
+import compgeom.RLineSegment2D;
 
 /**
  * <p>

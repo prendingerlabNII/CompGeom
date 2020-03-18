@@ -47,20 +47,21 @@ import java.util.*;
 public final class RPolygon2D implements Iterable<RPoint2D>, RBoundSurface2D {
 
     /**
-     * the points of this polygon
+     *
      */
-    private final List<RPoint2D> points;
-
-    /**
-     * the points of this polygon
-     */
-    private Set<RLineSegment2D> segments;
-
+    private static final long serialVersionUID = -7802759188882478111L;
     /**
      * a pre calculated has code
      */
     private final int hash;
-
+    /**
+     * the points of this polygon
+     */
+    private List<RPoint2D> points;
+    /**
+     * the points of this polygon
+     */
+    private Set<RLineSegment2D> segments;
     /**
      * is this polygon simple?
      */
@@ -90,71 +91,67 @@ public final class RPolygon2D implements Iterable<RPoint2D>, RBoundSurface2D {
      * minimum y value of the bounding box aligned with the x- and y-axis
      */
     private Rational minY;
+
     /**
-     * Create a new polygon given an array of x- and y coordinates.
-     * The order of the point can be changed while creating the polygon.
-     * For example, if the point <code>C</code> in <code>A,B,C,D,E</code>
-     * has the lowest y coordinate, that point is then placed at the start
-     * of the internal list of points, which then looks like:
-     * <code>C,D,E,A,B</code>. This is done because polygons can then be
-     * compared in linear time. Polygons
-     * <code>new RPolygon2D(A,B,C)</code> and <code>new RPolygon2D(C,B,A)</code>
-     * will be considered equal.
+     * Create a new polygon given an array of x- and y coordinates. The order of the
+     * point can be changed while creating the polygon. For example, if the point
+     * <code>C</code> in <code>A,B,C,D,E</code> has the lowest y coordinate, that
+     * point is then placed at the start of the internal list of points, which then
+     * looks like: <code>C,D,E,A,B</code>. This is done because polygons can then be
+     * compared in linear time. Polygons <code>new RPolygon2D(A,B,C)</code> and
+     * <code>new RPolygon2D(C,B,A)</code> will be considered equal.
      *
      * @param xs the x coordinates.
      * @param ys the y coordinates.
-     * @throws IllegalArgumentException if <code>pts</code> contains less
-     *                                  than 3 points or if all points are
-     *                                  collinear or if <code>xs.length</code>
-     *                                  does not equal <code>ys.length</code>.
+     * @throws IllegalArgumentException if <code>pts</code> contains less than 3
+     *                                  points or if all points are collinear or if
+     *                                  <code>xs.length</code> does not equal
+     *                                  <code>ys.length</code>.
      */
     public RPolygon2D(int[] xs, int[] ys) throws IllegalArgumentException {
         this(CGUtil.createRPoint2DList(xs, ys));
     }
 
     /**
-     * Creates a polygon with the points from <code>pts</code> added to it.
-     * The order of the point can be changed while creating the polygon.
-     * For example, if the point <code>C</code> in <code>A,B,C,D,E</code>
-     * has the lowest y coordinate, that point is then placed at the start
-     * of the internal list of points, which then looks like:
-     * <code>C,D,E,A,B</code>. This is done because polygons can then be
-     * compared in linear time. Polygons
+     * Creates a polygon with the points from <code>pts</code> added to it. The
+     * order of the point can be changed while creating the polygon. For example, if
+     * the point <code>C</code> in <code>A,B,C,D,E</code> has the lowest y
+     * coordinate, that point is then placed at the start of the internal list of
+     * points, which then looks like: <code>C,D,E,A,B</code>. This is done because
+     * polygons can then be compared in linear time. Polygons
      * <code>new RPolygon2D(A,B,C)</code> and <code>new RPolygon2D(C,B,A)</code>
      * will be considered equal.
      *
      * @param pts the points to add to this polygon.
-     * @throws IllegalArgumentException if <code>pts</code> contains less
-     *                                  than 3 points or if all points are
-     *                                  collinear.
+     * @throws IllegalArgumentException if <code>pts</code> contains less than 3
+     *                                  points or if all points are collinear.
      */
     public RPolygon2D(RPoint2D... pts) throws IllegalArgumentException {
         this(Arrays.asList(pts));
     }
 
     /**
-     * Creates a polygon with the points from <code>pts</code> added to it.
-     * The order of the point can be changed while creating the polygon.
-     * For example, if the point <code>C</code> in <code>A,B,C,D,E</code>
-     * has the lowest y coordinate, that point is then placed at the start
-     * of the internal list of points, which then looks like:
-     * <code>C,D,E,A,B</code>. This is done because polygons can then be
-     * compared in linear time. Polygons
+     * Creates a polygon with the points from <code>pts</code> added to it. The
+     * order of the point can be changed while creating the polygon. For example, if
+     * the point <code>C</code> in <code>A,B,C,D,E</code> has the lowest y
+     * coordinate, that point is then placed at the start of the internal list of
+     * points, which then looks like: <code>C,D,E,A,B</code>. This is done because
+     * polygons can then be compared in linear time. Polygons
      * <code>new RPolygon2D(A,B,C)</code> and <code>new RPolygon2D(C,A,B)</code>
      * will be considered equal.
      *
      * @param pts the points to add to this polygon.
-     * @throws IllegalArgumentException if <code>pts</code> contains less
-     *                                  than 3 points, if all points are
-     *                                  collinear or if there are two successive
-     *                                  points that are equal.
+     * @throws IllegalArgumentException if <code>pts</code> contains less than 3
+     *                                  points, if all points are collinear or if
+     *                                  there are two successive points that are
+     *                                  equal.
      */
     public RPolygon2D(List<RPoint2D> pts) throws IllegalArgumentException {
         if (pts.size() < 3) {
             throw new IllegalArgumentException("invalid polygon: it must contain at least points");
         }
-        for(int i = 1; i < pts.size(); i++) {
-            if(pts.get(i-1).equals(pts.get(i))) {
+        for (int i = 1; i < pts.size(); i++) {
+            if (pts.get(i - 1).equals(pts.get(i))) {
                 throw new IllegalArgumentException("'pts' cannot contain two equal points in a row");
             }
         }
@@ -179,9 +176,9 @@ public final class RPolygon2D implements Iterable<RPoint2D>, RBoundSurface2D {
 
         int cuts = 0;
 
-        for(RLineSegment2D s : this.segments) {
+        for (RLineSegment2D s : this.segments) {
             // Immediately return true if 'p' lies on a segment.
-            if(s.contains(p)) return true;
+            if (s.contains(p)) return true;
 
             // Find the possible intersection point.
             RPoint2D intersection = ray.intersection(s);
@@ -191,25 +188,25 @@ public final class RPolygon2D implements Iterable<RPoint2D>, RBoundSurface2D {
 
             // Only count a cut if there is an intersection, and that intersection
             // does not pass through the uppermost point of 's'.
-            if(!(intersection == null || intersection.equals(upper))) {
+            if (!(intersection == null || intersection.equals(upper))) {
                 cuts++;
             }
         }
 
         // The point is inside this polygon if there are an uneven
         // number of 'cuts' through the segments of this polygon.
-        return cuts%2 == 1;
+        return cuts % 2 == 1;
     }
 
     /**
-     * Returns <code>true</code> iff <code>o</code> is a <code>RPolygon2D</code>
-     * and if all points in <code>this</code> are also in <code>o</code>
-     * in the same order.
+     * Returns <code>true</code> iff <code>o</code> is a <code>RPolygon2D</code> and
+     * if all points in <code>this</code> are also in <code>o</code> in the same
+     * order.
      *
      * @param o the other polygon.
-     * @return <code>true</code> iff <code>o</code> is a <code>RPolygon2D</code>
-     *         and if all points in <code>this</code> are also in <code>o</code>
-     *         in the same order.
+     * @return <code>true</code> iff <code>o</code> is a <code>RPolygon2D</code> and
+     * if all points in <code>this</code> are also in <code>o</code> in the
+     * same order.
      */
     @Override
     public boolean equals(Object o) {
@@ -218,7 +215,7 @@ public final class RPolygon2D implements Iterable<RPoint2D>, RBoundSurface2D {
         RPolygon2D that = (RPolygon2D) o;
         return this.segments.equals(that.segments);
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -226,13 +223,12 @@ public final class RPolygon2D implements Iterable<RPoint2D>, RBoundSurface2D {
     public List<RPoint2D> getPoints() {
         return new ArrayList<RPoint2D>(points);
     }
-    
+
     /**
-     * Returns a copy of the list of points from this polygon where
-     * the first and last points are the same (making a closed 'walk').
+     * Returns a copy of the list of points from this polygon where the first and
+     * last points are the same (making a closed 'walk').
      *
-     * @return a copy of the list of points from this polygon forming
-     *         a closed walk.
+     * @return a copy of the list of points from this polygon forming a closed walk.
      */
     public List<RPoint2D> getPointsClosed() {
         List<RPoint2D> copy = new ArrayList<RPoint2D>(points);
@@ -241,29 +237,29 @@ public final class RPolygon2D implements Iterable<RPoint2D>, RBoundSurface2D {
     }
 
     /**
-     * Returns the set of line segments this polygon is made of. Note that
-     * a "closed" polygon is returned: from a polygon made of the points
-     * <code>(0,0)</code>, <code>(1,1)</code> and <code>(1,0)</code>, the
-     * following segments are returned: <code>(0,0)->(1,1)</code>,
-     * <code>(1,1)->(1,0)</code> and <code>(1,0)->(0,0)</code>.
+     * Returns the set of line segments this polygon is made of. Note that a
+     * "closed" polygon is returned: from a polygon made of the points
+     * <code>(0,0)</code>, <code>(1,1)</code> and <code>(1,0)</code>, the following
+     * segments are returned: <code>(0,0)->(1,1)</code>, <code>(1,1)->(1,0)</code>
+     * and <code>(1,0)->(0,0)</code>.
      *
      * @return the set of line segments this polygon is made of.
      */
     public Set<RLineSegment2D> getSegments() {
-        if(segments == null) {
+        if (segments == null) {
             segments = new LinkedHashSet<RLineSegment2D>();
             int N = points.size();
             RPoint2D a, b;
-            for(int i = 1; i < N; i++) {
-                a = points.get(i-1);
+            for (int i = 1; i < N; i++) {
+                a = points.get(i - 1);
                 b = points.get(i);
-                if(!a.equals(b)) {
+                if (!a.equals(b)) {
                     segments.add(new RLineSegment2D(a, b));
                 }
             }
-            a = points.get(N-1);
+            a = points.get(N - 1);
             b = points.get(0);
-            if(!a.equals(b)) {
+            if (!a.equals(b)) {
                 segments.add(new RLineSegment2D(a, b)); // close the polygon
             }
         }
@@ -289,15 +285,15 @@ public final class RPolygon2D implements Iterable<RPoint2D>, RBoundSurface2D {
         this.minY = first.y;
         this.maxX = first.x;
         this.maxY = first.y;
-        for(int i = 1; i < this.points.size(); i++) {
+        for (int i = 1; i < this.points.size(); i++) {
             RPoint2D p = points.get(i);
             Rational x = p.x;
             Rational y = p.y;
 
-            if(x.isLessThan(minX)) minX = x;
-            if(y.isLessThan(minY)) minY = y;
-            if(x.isMoreThan(maxX)) maxX = x;
-            if(y.isMoreThan(maxY)) maxY = y;
+            if (x.isLessThan(minX)) minX = x;
+            if (y.isLessThan(minY)) minY = y;
+            if (x.isMoreThan(maxX)) maxX = x;
+            if (y.isMoreThan(maxY)) maxY = y;
         }
     }
 
@@ -305,7 +301,7 @@ public final class RPolygon2D implements Iterable<RPoint2D>, RBoundSurface2D {
      * Returns true iff this polygon is complex (not simple).
      *
      * @return true iff this polygon is not simple.
-     * @see RPolygon2D#isSimple() 
+     * @see RPolygon2D#isSimple()
      */
     public boolean isComplex() {
         return !this.isSimple();
@@ -330,24 +326,23 @@ public final class RPolygon2D implements Iterable<RPoint2D>, RBoundSurface2D {
 
     /**
      * <p>
-     * Returns <code>true</code> iff this polygon is convex.
-     * A polygon is convex if all interior angles are less
-     * than 180 degrees: all the vertices point 'outwards',
-     * away from the center <sup>1</sup>.
+     * Returns <code>true</code> iff this polygon is convex. A polygon is convex if
+     * all interior angles are less than 180 degrees: all the vertices point
+     * 'outwards', away from the center <sup>1</sup>.
      * </p>
      * <p>
      * 1. <a href="http://www.mathopenref.com/polygonconvex.html">
      * http://www.mathopenref.com/polygonconvex.html</a>
      * </p>
-     * 
+     *
      * @return <code>true</code> iff this polygon is convex.
      */
     public boolean isConvex() {
         // Check is this method has already been invoked.
-        if(convex == null) {
-            if(this.points.size() == 3) {
+        if (convex == null) {
+            if (this.points.size() == 3) {
                 this.convex = true;
-            } else if(this.isComplex()) {
+            } else if (this.isComplex()) {
                 // Complex polygons are not convex.
                 this.convex = false;
             } else {
@@ -363,13 +358,13 @@ public final class RPolygon2D implements Iterable<RPoint2D>, RBoundSurface2D {
                 // Check the first turn (a, b, c cannot be collinear since we removed those).
                 boolean firstTurn = CGUtil.formsLeftTurn(a, b, c);
 
-                for(int i = 3; i < temp.size(); i++) {
-                    a = temp.get(i-2);
-                    b = temp.get(i-1);
+                for (int i = 3; i < temp.size(); i++) {
+                    a = temp.get(i - 2);
+                    b = temp.get(i - 1);
                     c = temp.get(i);
 
                     // All points should form the same turn as the first turn.
-                    if(CGUtil.formsLeftTurn(a, b, c) != firstTurn) {
+                    if (CGUtil.formsLeftTurn(a, b, c) != firstTurn) {
                         return false;
                     }
                 }
@@ -383,35 +378,35 @@ public final class RPolygon2D implements Iterable<RPoint2D>, RBoundSurface2D {
 
     /**
      * <p>
-     * Returns <code>true</code> iff this polygon is simple. <i>"A polygon <code>P</code>
-     * is said to be simple (or Jordan) if the only points of the plane
-     * belonging to two polygon edges of <code>P</code> are the polygon
+     * Returns <code>true</code> iff this polygon is simple. <i>"A polygon
+     * <code>P</code> is said to be simple (or Jordan) if the only points of the
+     * plane belonging to two polygon edges of <code>P</code> are the polygon
      * vertices of <code>P</code>." <sup>1</sup></i>
      * </p>
      * <p>
-     * 1. <a href="http://mathworld.wolfram.com/about/author.html">Weisstein,
-     * Eric W.</a> "Simple Polygon." <i><a href="http://mathworld.wolfram.com/">
-     * From MathWorld</a></i>--A Wolfram Web Resource.
+     * 1. <a href="http://mathworld.wolfram.com/about/author.html">Weisstein, Eric
+     * W.</a> "Simple Polygon." <i><a href="http://mathworld.wolfram.com/"> From
+     * MathWorld</a></i>--A Wolfram Web Resource.
      * <a href="http://mathworld.wolfram.com/SimplePolygon.html">
-     * http://mathworld.wolfram.com/SimplePolygon.html</a> 
+     * http://mathworld.wolfram.com/SimplePolygon.html</a>
      * </p>
      *
      * @return <code>true</code> iff this polygon is simple.
      */
     public boolean isSimple() {
-        if(simple == null) {
+        if (simple == null) {
             Set<RLineSegment2D> segments = getSegments();
             simple = !ShamosHoey.intersectionExists(segments, true);
         }
         return simple;
     }
-    
+
     /**
-     * Returns an <code>Iterator&lt;RPoint2D&gt;</code> of the
-     * points in this polygon.
+     * Returns an <code>Iterator&lt;RPoint2D&gt;</code> of the points in this
+     * polygon.
      *
-     * @return an <code>Iterator&lt;RPoint2D&gt;</code> of the
-     *         points in this polygon.
+     * @return an <code>Iterator&lt;RPoint2D&gt;</code> of the points in this
+     * polygon.
      */
     @Override
     public Iterator<RPoint2D> iterator() {
@@ -451,14 +446,14 @@ public final class RPolygon2D implements Iterable<RPoint2D>, RBoundSurface2D {
     }
 
     /**
-     * Returns the points <code>pts</code> reordered so that the first
-     * point is the one with the lowest y coordinate while keeping the
-     * 'path' of the points in tact.
+     * Returns the points <code>pts</code> reordered so that the first point is the
+     * one with the lowest y coordinate while keeping the 'path' of the points in
+     * tact.
      *
      * @param pts the points.
-     * @return the points <code>pts</code> reordered so that the first
-     *         point is the one with the lowest y coordinate while keeping the
-     *         'path' of the points in tact.
+     * @return the points <code>pts</code> reordered so that the first point is the
+     * one with the lowest y coordinate while keeping the 'path' of the
+     * points in tact.
      */
     private List<RPoint2D> rearrange(List<RPoint2D> pts) {
         final int indexLowest = CGUtil.getExtremalIndex(pts, Extremal.LOWER_LEFT);
@@ -502,4 +497,34 @@ public final class RPolygon2D implements Iterable<RPoint2D>, RBoundSurface2D {
         RPoint2D bottomRight = new RPoint2D(this.minX, this.minY);
         return new RRectangle(topLeft, topRight, bottomLeft, bottomRight);
     }
+
+    /**
+     * CLONE
+     */
+    public RPolygon2D clone() {
+        RPolygon2D clone = null;
+        try {
+            clone = (RPolygon2D) super.clone();
+            // clone points
+            ArrayList<RPoint2D> pointsClone = new ArrayList<RPoint2D>();
+            for (RPoint2D rPoint2D : clone.getPoints()) {
+                pointsClone.add(rPoint2D.clone());
+            }
+            clone.points = pointsClone;
+            // clone Segments
+            LinkedHashSet<RLineSegment2D> segmentsClone = new LinkedHashSet<RLineSegment2D>();
+            for (RLineSegment2D ls : segments) {
+                segmentsClone.add(ls.clone());
+            }
+            clone.maxX = maxX.clone();
+            clone.maxY = maxY.clone();
+            clone.minX = minX.clone();
+            clone.minY = minY.clone();
+
+        } catch (CloneNotSupportedException cns) {
+            cns.printStackTrace();
+        }
+        return clone;
+    }
+
 }

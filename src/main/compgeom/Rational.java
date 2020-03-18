@@ -76,63 +76,52 @@ import java.math.MathContext;
  * Date: Mar 11, 2010
  * </p>
  */
-public final class Rational extends Number implements Comparable<Rational> {
-
-    /**
-     * serial version UID since Number is Serializable.
-     */
-    private static final long serialVersionUID = 8712356785548951879L;
+public final class Rational extends Number implements Comparable<Rational>, Cloneable {
 
     /**
      * the default precision used by {@link #toBigDecimal()}.
      */
     public static final int DEFAULT_PRECISION = 100;
-
     /**
      * the public static value -1.
      */
     public static final Rational MINUS_ONE = new Rational(-1);
-
     /**
      * the public static value 0.
      */
     public static final Rational ZERO = new Rational(0);
-
     /**
      * the public static value 1.
      */
     public static final Rational ONE = new Rational(1);
-
     /**
      * the public static value 10.
      */
     public static final Rational TEN = new Rational(10);
-
     /**
      * the public static value 100.
      */
     public static final Rational HUNDRED = new Rational(100);
-
     /**
      * the public static value 1000.
      */
     public static final Rational THOUSAND = new Rational(1000);
-
     /**
      * the public static value positive infinity.
      */
     public static final Rational POSITIVE_INFINITY = new Rational(Double.POSITIVE_INFINITY);
-
     /**
      * the public static value negative infinity.
      */
     public static final Rational NEGATIVE_INFINITY = new Rational(Double.NEGATIVE_INFINITY);
-
     /**
      * the public static value NaN (not a number).
      */
     public static final Rational NaN = new Rational(Double.NaN);
-
+    /**
+     * serial version UID since Number is Serializable.
+     */
+    private static final long serialVersionUID = 8712356785548951879L;
     /**
      * the numerator of this rational.
      */
@@ -254,7 +243,7 @@ public final class Rational extends Number implements Comparable<Rational> {
      * <a href="http://www.antlr.org">ANTLR</a> was used to generate a lexer
      * and parser to parse the <code>number</code>.
      * </p>
-     * 
+     *
      * @param number the number.
      * @throws NumberFormatException if a number is not conform the grammar above.
      */
@@ -346,18 +335,15 @@ public final class Rational extends Number implements Comparable<Rational> {
         if (this.isNaN() || that.isNaN()) {
             return NaN;
         } else if (this.isInfinite() || that.isInfinite()) {
-            if (this.isInfinite() && that.isInfinite() &&
-                    (this.isPositive() != that.isPositive())) {
+            if (this.isInfinite() && that.isInfinite() && (this.isPositive() != that.isPositive())) {
                 return NaN;
-            } else if ((this.isInfinite() && this.isPositive()) ||
-                    (that.isInfinite() && that.isPositive())) {
+            } else if ((this.isInfinite() && this.isPositive()) || (that.isInfinite() && that.isPositive())) {
                 return POSITIVE_INFINITY;
             } else {
                 return NEGATIVE_INFINITY;
             }
         } else {
-            BigInteger num = this.numerator.multiply(that.denominator).add(
-                    this.denominator.multiply(that.numerator));
+            BigInteger num = this.numerator.multiply(that.denominator).add(this.denominator.multiply(that.numerator));
             BigInteger den = this.denominator.multiply(that.denominator);
             return new Rational(num, den);
         }
@@ -376,8 +362,8 @@ public final class Rational extends Number implements Comparable<Rational> {
      *
      * @param that the other number
      * @return -1 if <code>this</code> is less than <code>that</code>,
-     *         1 if <code>this</code> is more than <code>that</code> or
-     *         0 if <code>this</code> equals <code>that</code>.
+     * 1 if <code>this</code> is more than <code>that</code> or
+     * 0 if <code>this</code> equals <code>that</code>.
      */
     @Override
     public int compareTo(Rational that) {
@@ -401,8 +387,8 @@ public final class Rational extends Number implements Comparable<Rational> {
      * returned as a positive value.
      *
      * @return the denominator of <code>this</code> as a rational. If
-     *         <code>this</code> is NaN, or infinity, <code>this</code>
-     *         is returned.
+     * <code>this</code> is NaN, or infinity, <code>this</code>
+     * is returned.
      */
     public Rational denominator() {
         if (!this.isRational()) {
@@ -466,8 +452,7 @@ public final class Rational extends Number implements Comparable<Rational> {
         if (this.isNaN()) {
             return Double.NaN;
         } else if (this.isInfinite()) {
-            return this.isPositive() ? Double.POSITIVE_INFINITY :
-                    Double.NEGATIVE_INFINITY;
+            return this.isPositive() ? Double.POSITIVE_INFINITY : Double.NEGATIVE_INFINITY;
         } else {
             return this.toBigDecimal().doubleValue();
         }
@@ -480,8 +465,8 @@ public final class Rational extends Number implements Comparable<Rational> {
      *
      * @param o the other object
      * @return <code>true</code> iff <code>o</code> is a <code>Rational</code>
-     *         and if <code>this.numerator</code> equals <code>that.numerator</code>
-     *         and <code>this.denominator</code> equals <code>that.denominator</code>.
+     * and if <code>this.numerator</code> equals <code>that.numerator</code>
+     * and <code>this.denominator</code> equals <code>that.denominator</code>.
      */
     @Override
     public boolean equals(Object o) {
@@ -491,8 +476,7 @@ public final class Rational extends Number implements Comparable<Rational> {
         if (!this.isRational() || !that.isRational()) {
             return this == that;
         } else {
-            return numerator.equals(that.numerator) &&
-                    denominator.equals(that.denominator);
+            return numerator.equals(that.numerator) && denominator.equals(that.denominator);
         }
     }
 
@@ -506,8 +490,7 @@ public final class Rational extends Number implements Comparable<Rational> {
         if (this.isNaN()) {
             return Float.NaN;
         } else if (this.isInfinite()) {
-            return this.isPositive() ? Float.POSITIVE_INFINITY :
-                    Float.NEGATIVE_INFINITY;
+            return this.isPositive() ? Float.POSITIVE_INFINITY : Float.NEGATIVE_INFINITY;
         } else {
             return this.toBigDecimal().floatValue();
         }
@@ -520,9 +503,9 @@ public final class Rational extends Number implements Comparable<Rational> {
      * <code>(numerator.hashCode()*13) ^ (denominator.hashCode()*37)</code>.
      *
      * @return a pre-calculated hash code:
-     *         0 if <code>NaN()</code>, 1 if <code>POSITIVE_INFINITY</code>,
-     *         -1 if <code>NEGATIVE_INFINITY</code> and else
-     *         <code>(numerator.hashCode()*13) ^ (denominator.hashCode()*37)</code>.
+     * 0 if <code>NaN()</code>, 1 if <code>POSITIVE_INFINITY</code>,
+     * -1 if <code>NEGATIVE_INFINITY</code> and else
+     * <code>(numerator.hashCode()*13) ^ (denominator.hashCode()*37)</code>.
      */
     @Override
     public int hashCode() {
@@ -564,9 +547,9 @@ public final class Rational extends Number implements Comparable<Rational> {
      * <code>this</code> is <code>NaN</code>, <code>NaN</code> is returned.
      *
      * @return the inverse, <code>1/(m/n)</code>, which equals
-     *         <code>n/m</code>, of a rational <code>m/n</code>.
-     *         When <code>this</code> is infinite, 0 is returned and when
-     *         <code>this</code> is <code>NaN</code>, <code>NaN</code> is returned.
+     * <code>n/m</code>, of a rational <code>m/n</code>.
+     * When <code>this</code> is infinite, 0 is returned and when
+     * <code>this</code> is <code>NaN</code>, <code>NaN</code> is returned.
      * @throws ArithmeticException when <code>this</code> equals zero.
      */
     public Rational inverse() throws ArithmeticException {
@@ -588,11 +571,12 @@ public final class Rational extends Number implements Comparable<Rational> {
      * <code>false</code> is returned.
      *
      * @return <code>true</code> iff <code>this</code> equals
-     *         {@link #NEGATIVE_INFINITY} or {@link #POSITIVE_INFINITY}, else
-     *         <code>false</code> is returned.
+     * {@link #NEGATIVE_INFINITY} or {@link #POSITIVE_INFINITY}, else
+     * <code>false</code> is returned.
      */
     public boolean isInfinite() {
-        return (this == POSITIVE_INFINITY) || (this == NEGATIVE_INFINITY);
+        // this == POSITIVE_INFINITY || this == NEGATIVE_INFINITY
+        return this.denominator == null && this.numerator == null;
     }
 
     /**
@@ -601,7 +585,7 @@ public final class Rational extends Number implements Comparable<Rational> {
      *
      * @param that the rational number to compare to <code>this</code>.
      * @return <code>true</code> iff <code>this</code> is less than
-     *         <code>that</code>.
+     * <code>that</code>.
      * @see #compareTo(Rational)
      */
     public boolean isLessThan(Rational that) {
@@ -614,7 +598,7 @@ public final class Rational extends Number implements Comparable<Rational> {
      *
      * @param that the rational number to compare to <code>this</code>.
      * @return <code>true</code> iff <code>this</code> is less than,
-     *         or equals <code>that</code>.
+     * or equals <code>that</code>.
      * @see #compareTo(Rational)
      */
     public boolean isLessThanEq(Rational that) {
@@ -627,7 +611,7 @@ public final class Rational extends Number implements Comparable<Rational> {
      *
      * @param that the rational number to compare to <code>this</code>.
      * @return <code>true</code> iff <code>this</code> is more than
-     *         <code>that</code>.
+     * <code>that</code>.
      * @see #compareTo(Rational)
      */
     public boolean isMoreThan(Rational that) {
@@ -640,7 +624,7 @@ public final class Rational extends Number implements Comparable<Rational> {
      *
      * @param that the rational number to compare to <code>this</code>.
      * @return <code>true</code> iff <code>this</code> is more than, or equals
-     *         <code>that</code>.
+     * <code>that</code>.
      * @see #compareTo(Rational)
      */
     public boolean isMoreThanEq(Rational that) {
@@ -661,7 +645,7 @@ public final class Rational extends Number implements Comparable<Rational> {
      * zero).
      *
      * @return <code>true</code> iff <code>this</code> is negative (less than
-     *         zero).
+     * zero).
      */
     public boolean isNegative() {
         return !this.isNaN() && !isPositive();
@@ -672,7 +656,7 @@ public final class Rational extends Number implements Comparable<Rational> {
      * or equal to zero).
      *
      * @return <code>true</code> iff <code>this</code> is positive (more than,
-     *         or equal to zero).
+     * or equal to zero).
      */
     public boolean isPositive() {
         if (this.isNaN()) {
@@ -702,36 +686,6 @@ public final class Rational extends Number implements Comparable<Rational> {
     @Override
     public long longValue() {
         return this.toBigDecimal().longValue();
-    }
-
-    /**
-     * Returns the rational with the maximum value between <code>a</code>
-     * and <code>b</code>/. The following rules apply: <br />
-     * <br />
-     * <code>-INF &lt; N &lt; +INF &lt; NaN</code>
-     *
-     * @param a the first rational value.
-     * @param b the second rational value.
-     * @return  the rational with the maximum value between <code>a</code> 
-     *          and <code>b</code>/.
-     */
-    public static Rational max(Rational a, Rational b) {
-        return a.isMoreThan(b) ? a : b;
-    }
-
-    /**
-     * Returns the rational with the minimum value between <code>a</code>
-     * and <code>b</code>/. The following rules apply: <br />
-     * <br />
-     * <code>-INF &lt; N &lt; +INF &lt; NaN</code>
-     *
-     * @param a the first rational value.
-     * @param b the second rational value.
-     * @return  the rational with the minimum value between <code>a</code>
-     *          and <code>b</code>/.
-     */
-    public static Rational min(Rational a, Rational b) {
-        return a.isLessThan(b) ? a : b;
     }
 
     /**
@@ -769,8 +723,7 @@ public final class Rational extends Number implements Comparable<Rational> {
         if (this.isNaN() || that.isNaN()) {
             return NaN;
         } else if (this.isInfinite() || that.isInfinite()) {
-            if ((this.isNegative() && that.isNegative()) ||
-                    (this.isPositive() && that.isPositive())) {
+            if ((this.isNegative() && that.isNegative()) || (this.isPositive() && that.isPositive())) {
                 return POSITIVE_INFINITY;
             } else {
                 return NEGATIVE_INFINITY;
@@ -821,11 +774,11 @@ public final class Rational extends Number implements Comparable<Rational> {
      * Returns the numerator of <code>this</code> as a rational. If
      * <code>this</code> is NaN, or infinity, <code>this</code> is returned.
      * Note that if <code>this</code> is negative, the numerator will
-     * also be negative. 
+     * also be negative.
      *
      * @return the numerator of <code>this</code> as a rational. If
-     *         <code>this</code> is NaN, or infinity, <code>this</code>
-     *         is returned.
+     * <code>this</code> is NaN, or infinity, <code>this</code>
+     * is returned.
      */
     public Rational numerator() {
         if (!this.isRational()) {
@@ -861,8 +814,7 @@ public final class Rational extends Number implements Comparable<Rational> {
      */
     public Rational pow(int n) throws IllegalArgumentException {
         if (n < 0) {
-            throw new IllegalArgumentException("Cannot raise '" + this +
-                    "' to a negative power.");
+            throw new IllegalArgumentException("Cannot raise '" + this + "' to a negative power.");
         }
 
         if (this.isNaN()) {
@@ -911,8 +863,8 @@ public final class Rational extends Number implements Comparable<Rational> {
                 return NEGATIVE_INFINITY;
             }
         } else {
-            BigInteger n = this.numerator.multiply(that.denominator).subtract(
-                    this.denominator.multiply(that.numerator));
+            BigInteger n = this.numerator.multiply(that.denominator)
+                                         .subtract(this.denominator.multiply(that.numerator));
             BigInteger d = this.denominator.multiply(that.denominator);
             return new Rational(n, d);
         }
@@ -923,7 +875,7 @@ public final class Rational extends Number implements Comparable<Rational> {
      * {@link #DEFAULT_PRECISION}.
      *
      * @return <code>this</code> as a <code>BigDecimal</code> with a
-     *         {@link #DEFAULT_PRECISION}.
+     * {@link #DEFAULT_PRECISION}.
      * @see #toBigDecimal(int)
      */
     public BigDecimal toBigDecimal() {
@@ -936,7 +888,7 @@ public final class Rational extends Number implements Comparable<Rational> {
      *
      * @param precision the numbers of accurate digits after the decimal point.
      * @return <code>this</code> as a <code>BigDecimal</code> with a certain
-     *         precision.
+     * precision.
      * @see #toBigDecimal()
      */
     public BigDecimal toBigDecimal(int precision) {
@@ -952,10 +904,56 @@ public final class Rational extends Number implements Comparable<Rational> {
      */
     @Override
     public String toString() {
-        if (this == POSITIVE_INFINITY) return "Infinity";
-        else if (this == NEGATIVE_INFINITY) return "-Infinity";
-        else if (this.isNaN()) return "NaN";
-        else if (denominator.equals(BigInteger.ONE)) return numerator.toString();
-        else return numerator.toString() + "/" + denominator.toString();
+        if (this == POSITIVE_INFINITY) {
+            return "Infinity";
+        } else if (this == NEGATIVE_INFINITY) {
+            return "-Infinity";
+        } else if (this.isNaN()) {
+            return "NaN";
+        } else if (denominator.equals(BigInteger.ONE)) {
+            return numerator.toString();
+        } else {
+            return numerator.toString() + "/" + denominator.toString();
+        }
+    }
+
+    public Rational clone() {
+        Rational clone = null;
+        try {
+            clone = (Rational) super.clone();
+        } catch (CloneNotSupportedException cns) {
+            cns.printStackTrace();
+        }
+        return clone;
+    }
+
+    /**
+     * Returns the rational with the maximum value between <code>a</code>
+     * and <code>b</code>/. The following rules apply: <br />
+     * <br />
+     * <code>-INF &lt; N &lt; +INF &lt; NaN</code>
+     *
+     * @param a the first rational value.
+     * @param b the second rational value.
+     * @return the rational with the maximum value between <code>a</code>
+     * and <code>b</code>/.
+     */
+    public static Rational max(Rational a, Rational b) {
+        return a.isMoreThan(b) ? a : b;
+    }
+
+    /**
+     * Returns the rational with the minimum value between <code>a</code>
+     * and <code>b</code>/. The following rules apply: <br />
+     * <br />
+     * <code>-INF &lt; N &lt; +INF &lt; NaN</code>
+     *
+     * @param a the first rational value.
+     * @param b the second rational value.
+     * @return the rational with the minimum value between <code>a</code>
+     * and <code>b</code>/.
+     */
+    public static Rational min(Rational a, Rational b) {
+        return a.isLessThan(b) ? a : b;
     }
 }

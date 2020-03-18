@@ -1,14 +1,22 @@
 // $ANTLR 3.2 Sep 23, 2009 12:02:23 /home/bart/Programming/IntelliJ/CompGeom/src/grammar/Rational.g 2010-05-01 17:56:30
 
 package compgeom.util.parser;
-import compgeom.*;
-import java.math.*;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 
-
-import org.antlr.runtime.*;
-import java.util.Stack;
-import java.util.List;
-import java.util.ArrayList;
+import org.antlr.runtime.ANTLRStringStream;
+import org.antlr.runtime.BaseRecognizer;
+import org.antlr.runtime.BitSet;
+import org.antlr.runtime.CommonTokenStream;
+import org.antlr.runtime.DFA;
+import org.antlr.runtime.IntStream;
+import org.antlr.runtime.NoViableAltException;
+import org.antlr.runtime.Parser;
+import org.antlr.runtime.ParserRuleReturnScope;
+import org.antlr.runtime.RecognitionException;
+import org.antlr.runtime.RecognizerSharedState;
+import org.antlr.runtime.Token;
+import org.antlr.runtime.TokenStream;
 
 public class RationalParser extends Parser {
     public static final String[] tokenNames = new String[] {

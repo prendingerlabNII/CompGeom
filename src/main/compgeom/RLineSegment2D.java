@@ -71,6 +71,11 @@ import compgeom.util.Extremal;
 public final class RLineSegment2D implements RCGObject {
 
     /**
+     *
+     */
+    private static final long serialVersionUID = 2783060596207144807L;
+
+    /**
      * the line that can be formed by going through {@link #p1} and {@link #p2}
      */
     public final RLine2D line;
@@ -122,7 +127,7 @@ public final class RLineSegment2D implements RCGObject {
      */
     public RLineSegment2D(RPoint2D pA, RPoint2D pB) throws IllegalArgumentException {
         if (pA.equals(pB)) {
-            throw new IllegalArgumentException("cannot create line segment: p1 equals p2, both are "+pA);
+            throw new IllegalArgumentException("cannot create line segment: p1 equals p2, both are " + pA);
         }
         p1 = Extremal.LEFT_LOWER.moreExtremeThan(pA, pB) ? pA : pB;
         p2 = p1 == pA ? pB : pA;
@@ -153,15 +158,12 @@ public final class RLineSegment2D implements RCGObject {
      *
      * @param p the point to check if it intersects with <code>this</code>.
      * @return <code>true</code> iff <code>p</code> lies on this segment. Note
-     *         that if <code>p</code> equals <code>this.p1</code> or <code>this.p2</code>,
-     *         it is also considered to lie on this segment.
+     * that if <code>p</code> equals <code>this.p1</code> or <code>this.p2</code>,
+     * it is also considered to lie on this segment.
      */
     public boolean contains(RPoint2D p) {
-        return (p1.equals(p) || p2.equals(p))
-                ||
-                (line.contains(p) &&
-                        (p.x.isMoreThanEq(minX) && p.x.isLessThanEq(maxX) &&
-                                p.y.isMoreThanEq(minY) && p.y.isLessThanEq(maxY)));
+        return (p1.equals(p) || p2.equals(p)) || (line.contains(p) && (p.x.isMoreThanEq(minX) && p.x
+                .isLessThanEq(maxX) && p.y.isMoreThanEq(minY) && p.y.isLessThanEq(maxY)));
     }
 
     /**
@@ -171,8 +173,8 @@ public final class RLineSegment2D implements RCGObject {
      *
      * @param o the other Object.
      * @return <code>true</code> iff <code>o</code> is a <code>RLineSegment2D</code>
-     *         and if <code>this.p1</code> equals <code>((RLineSegment2D)o).p1</code> and
-     *         <code>this.p2</code> equals <code>((RLineSegment2D)o).p2</code>.
+     * and if <code>this.p1</code> equals <code>((RLineSegment2D)o).p1</code> and
+     * <code>this.p2</code> equals <code>((RLineSegment2D)o).p2</code>.
      */
     @Override
     public boolean equals(Object o) {
@@ -189,8 +191,8 @@ public final class RLineSegment2D implements RCGObject {
      *
      * @param p the point.
      * @return <code>true</code> if <code>p</code> equals either
-     *         <code>{@link RLineSegment2D#p1}</code> or
-     *         <code>{@link RLineSegment2D#p2}</code>.
+     * <code>{@link RLineSegment2D#p1}</code> or
+     * <code>{@link RLineSegment2D#p2}</code>.
      */
     public boolean hasEnding(RPoint2D p) {
         return p1.equals(p) || p2.equals(p);
@@ -201,7 +203,7 @@ public final class RLineSegment2D implements RCGObject {
      * <code>(p1.hashCode()*13) ^ (p2.hashCode()*37)</code>.
      *
      * @return a pre-calculated hash code, calculated as follows:
-     *         <code>(p1.hashCode()*13) ^ (p2.hashCode()*37)</code>.
+     * <code>(p1.hashCode()*13) ^ (p2.hashCode()*37)</code>.
      */
     @Override
     public int hashCode() {
@@ -232,16 +234,16 @@ public final class RLineSegment2D implements RCGObject {
      *
      * @param that the <code>RLineSegment2D</code>.
      * @return the intersection point of two <code>RLineSegment2D</code>'s:
-     *         <code>this</code> and <code>that</code>.
+     * <code>this</code> and <code>that</code>.
      */
     public RPoint2D intersection(RLineSegment2D that) {
         if (this.p1.equals(that.p2)) {
             return this.p1;
         } else if (this.p2.equals(that.p1)) {
             return this.p2;
-        } else if(this.p1.equals(that.p1)) {
+        } else if (this.p1.equals(that.p1)) {
             return this.line.slope.equals(that.line.slope) ? null : this.p1;
-        } else if(this.p2.equals(that.p2)) {
+        } else if (this.p2.equals(that.p2)) {
             return this.line.slope.equals(that.line.slope) ? null : this.p2;
         } else {
             RPoint2D p = this.line.intersection(that.line);
@@ -262,7 +264,7 @@ public final class RLineSegment2D implements RCGObject {
      *
      * @param line the <code>{@link RLine2D}</code>.
      * @return the intersection point of <code>this</code> segment and a
-     *         <code>line</code>.
+     * <code>line</code>.
      */
     public RPoint2D intersection(RLine2D line) {
         RPoint2D p = this.line.intersection(line);
@@ -299,7 +301,7 @@ public final class RLineSegment2D implements RCGObject {
      *
      * @param that the other <code>RLineSegment2D</code>.
      * @return <code>true</code> if <code>this</code> and
-     *         <code>that</code> intersect.
+     * <code>that</code> intersect.
      */
     public boolean intersects(RLineSegment2D that) {
         return intersection(that) != null;
@@ -313,7 +315,7 @@ public final class RLineSegment2D implements RCGObject {
      *
      * @param line the <code>RLine2D</code> to check.
      * @return <code>true</code> if <code>this</code> and
-     *         <code>line</code> intersect.
+     * <code>line</code> intersect.
      */
     public boolean intersects(RLine2D line) {
         return intersection(line) != null;
@@ -327,7 +329,7 @@ public final class RLineSegment2D implements RCGObject {
      *
      * @param that the other segment.
      * @return <code>true</code> iff <code>this</code> and <code>that</code>
-     *         are equal in length.
+     * are equal in length.
      * @see #lengthSquared()
      */
     public boolean isEqualLength(RLineSegment2D that) {
@@ -342,7 +344,7 @@ public final class RLineSegment2D implements RCGObject {
      *
      * @param that the other segment.
      * @return <code>true</code> iff <code>this</code>' length is more than
-     *         <code>that</code>'s length.
+     * <code>that</code>'s length.
      * @see #lengthSquared()
      */
     public boolean isLongerThan(RLineSegment2D that) {
@@ -357,7 +359,7 @@ public final class RLineSegment2D implements RCGObject {
      *
      * @param that the other segment.
      * @return <code>true</code> iff <code>this</code>' length is less than
-     *         <code>that</code>'s length.
+     * <code>that</code>'s length.
      * @see #lengthSquared()
      */
     public boolean isShorterThan(RLineSegment2D that) {
@@ -368,7 +370,7 @@ public final class RLineSegment2D implements RCGObject {
      * Calculates the approximate length of this line segment.
      *
      * @return the approximate length of this line segment as
-     *         a <code>double</code>.
+     * a <code>double</code>.
      */
     public double length() {
         return this.p1.distance(this.p2);
@@ -379,7 +381,7 @@ public final class RLineSegment2D implements RCGObject {
      * (this.p1.y - this.p2.y)<sup>2</sup></code>.
      *
      * @return the exact value of <code>(this.p1.x - this.p2.x)<sup>2</sup> +
-     *         (this.p1.y - this.p2.y)<sup>2</sup></code>.
+     * (this.p1.y - this.p2.y)<sup>2</sup></code>.
      */
     public Rational lengthSquared() {
         return this.p1.distanceSquared(this.p2);
@@ -390,7 +392,7 @@ public final class RLineSegment2D implements RCGObject {
      * <code>{@link #p2}</code>.
      *
      * @return the exact delta x + delta y between
-     *         <code>this.p1</code> and <code>this.p2</code>.
+     * <code>this.p1</code> and <code>this.p2</code>.
      */
     public Rational lengthXY() {
         return this.p1.distanceXY(this.p2);
@@ -404,5 +406,19 @@ public final class RLineSegment2D implements RCGObject {
     @Override
     public String toString() {
         return String.format("[%s~%s]", p1, p2);
+    }
+
+    /**
+     * CLONE
+     */
+    public RLineSegment2D clone() {
+        RLineSegment2D clone = null;
+        try {
+            clone = (RLineSegment2D) super.clone();
+
+        } catch (CloneNotSupportedException cns) {
+            cns.printStackTrace();
+        }
+        return clone;
     }
 }

@@ -1,13 +1,18 @@
 // $ANTLR 3.2 Sep 23, 2009 12:02:23 /home/bart/Programming/IntelliJ/CompGeom/src/grammar/Line.g 2010-05-01 11:59:24
 
 package compgeom.util.parser;
-import compgeom.*;
+import org.antlr.runtime.ANTLRStringStream;
+import org.antlr.runtime.BitSet;
+import org.antlr.runtime.CommonTokenStream;
+import org.antlr.runtime.IntStream;
+import org.antlr.runtime.NoViableAltException;
+import org.antlr.runtime.Parser;
+import org.antlr.runtime.RecognitionException;
+import org.antlr.runtime.RecognizerSharedState;
+import org.antlr.runtime.Token;
+import org.antlr.runtime.TokenStream;
 
-
-import org.antlr.runtime.*;
-import java.util.Stack;
-import java.util.List;
-import java.util.ArrayList;
+import compgeom.RLine2D;
 
 public class LineParser extends Parser {
     public static final String[] tokenNames = new String[] {

@@ -44,7 +44,10 @@ public final class RPoint2D implements RCGObject {
      * a point denoting the origin: (0,0)
      */
     public static final RPoint2D ORIGIN = new RPoint2D(0, 0);
-
+    /**
+     *
+     */
+    private static final long serialVersionUID = -1258443822438765732L;
     /**
      * the x coordinate
      */
@@ -87,7 +90,7 @@ public final class RPoint2D implements RCGObject {
      * @see Rational#isRational()
      */
     public RPoint2D(Rational x, Rational y) throws IllegalArgumentException {
-        if(x.isNaN() || y.isNaN()) {
+        if (x.isNaN() || y.isNaN()) {
             throw new IllegalArgumentException("x or y cannot be NaN or infinite");
         }
         this.x = x;
@@ -101,7 +104,7 @@ public final class RPoint2D implements RCGObject {
      *
      * @param that the other point.
      * @return the approximate distance between <code>this</code> and
-     *         <code>that</code> point.
+     * <code>that</code> point.
      */
     public double distance(RPoint2D that) {
         double dX = this.x.subtract(that.x).doubleValue();
@@ -115,7 +118,7 @@ public final class RPoint2D implements RCGObject {
      *
      * @param that the other point.
      * @return the exact value of <code>(this.x - that.x)<sup>2</sup> +
-     *         (this.y - that.y)<sup>2</sup></code>.
+     * (this.y - that.y)<sup>2</sup></code>.
      */
     public Rational distanceSquared(RPoint2D that) {
         Rational dX = this.x.subtract(that.x);
@@ -130,8 +133,8 @@ public final class RPoint2D implements RCGObject {
      *
      * @param that the other point.
      * @return the exact distance between  <code>this</code> and
-     *         <code>that</code> point denoted by:
-     *         <code>|this.x-that.x| + |this.y-that.y|</code>.
+     * <code>that</code> point denoted by:
+     * <code>|this.x-that.x| + |this.y-that.y|</code>.
      */
     public Rational distanceXY(RPoint2D that) {
         Rational dX = this.x.subtract(that.x).abs();
@@ -146,8 +149,8 @@ public final class RPoint2D implements RCGObject {
      *
      * @param o the other Object.
      * @return <code>true</code> iff <code>o</code> is a <code>RPoint2D</code>
-     *         and if <code>this.x</code> equals <code>((RPoint2D)o).x</code> and
-     *         <code>this.y</code> equals <code>((RPoint2D)o).y</code>.
+     * and if <code>this.x</code> equals <code>((RPoint2D)o).x</code> and
+     * <code>this.y</code> equals <code>((RPoint2D)o).y</code>.
      */
     @Override
     public boolean equals(Object o) {
@@ -162,7 +165,7 @@ public final class RPoint2D implements RCGObject {
      * <code>(x.hashCode()*23) ^ (y.hashCode()*17)</code>.
      *
      * @return a pre-calculated hash code, calculated as follows:
-     *         <code>(x.hashCode()*23) ^ (y.hashCode()*17)</code>.
+     * <code>(x.hashCode()*23) ^ (y.hashCode()*17)</code>.
      */
     @Override
     public int hashCode() {
@@ -176,7 +179,7 @@ public final class RPoint2D implements RCGObject {
      *
      * @param that the other point.
      * @return <code>true</code> iff <code>this</code> point is above
-     *         <code>that</code> point.
+     * <code>that</code> point.
      */
     public boolean isAbove(RPoint2D that) {
         return this.y.isMoreThan(that.y);
@@ -189,7 +192,7 @@ public final class RPoint2D implements RCGObject {
      *
      * @param that the other point.
      * @return <code>true</code> iff <code>this</code> point is below
-     *         <code>that</code> point.
+     * <code>that</code> point.
      */
     public boolean isBelow(RPoint2D that) {
         return this.y.isLessThan(that.y);
@@ -205,7 +208,7 @@ public final class RPoint2D implements RCGObject {
      *
      * @param line the line.
      * @return <code>true</code> if <code>this</code> point lies on the left of
-     *         a given <code>line</code>.
+     * a given <code>line</code>.
      */
     public boolean isLeftOf(RLine2D line) {
         return !line.contains(this) && !this.isRightOf(line);
@@ -218,7 +221,7 @@ public final class RPoint2D implements RCGObject {
      *
      * @param that the other point.
      * @return <code>true</code> iff <code>this</code> point is to the left of
-     *         <code>that</code> point.
+     * <code>that</code> point.
      */
     public boolean isLeftOf(RPoint2D that) {
         return this.x.isLessThan(that.x);
@@ -234,34 +237,34 @@ public final class RPoint2D implements RCGObject {
      *
      * @param line the line.
      * @return <code>true</code> if <code>this</code> point lies on the right of
-     *         a given <code>line</code>.
+     * a given <code>line</code>.
      */
     public boolean isRightOf(RLine2D line) {
-        if(line.contains(this)) {
+        if (line.contains(this)) {
             return false;
         }
-        if(line.isHorizontal()) {
+        if (line.isHorizontal()) {
             return this.y.isLessThan(line.yIntercept());
         }
-        if(line.isVertical()) {
+        if (line.isVertical()) {
             return this.x.isMoreThan(line.xIntercept());
         }
 
         RPoint2D linePoint = line.intersection(RLine2D.vertical(Rational.ZERO));
         RLine2D temp = new RLine2D(this, linePoint);
 
-        if(this.y.isLessThan(linePoint.y)) {
+        if (this.y.isLessThan(linePoint.y)) {
             // a
-            if(line.slope.isNegative()) {
+            if (line.slope.isNegative()) {
                 return temp.slope.isNegative() && temp.slope.isMoreThan(line.slope);
             }
             // b
             else {
                 return temp.slope.isNegative() || temp.slope.isMoreThan(line.slope);
             }
-        } else if(this.y.isMoreThan(linePoint.y)) {
+        } else if (this.y.isMoreThan(linePoint.y)) {
             // c
-            if(line.slope.isNegative()) {
+            if (line.slope.isNegative()) {
                 return temp.slope.isPositive() || temp.slope.isLessThan(line.slope);
             }
             // d
@@ -281,7 +284,7 @@ public final class RPoint2D implements RCGObject {
      *
      * @param that the other point.
      * @return <code>true</code> iff <code>this</code> point is to the left of
-     *         <code>that</code> point.
+     * <code>that</code> point.
      */
     public boolean isRightOf(RPoint2D that) {
         return this.x.isMoreThan(that.x);
@@ -317,5 +320,18 @@ public final class RPoint2D implements RCGObject {
      */
     public RPoint2D translate(Rational dx, Rational dy) {
         return new RPoint2D(this.x.add(dx), this.y.add(dy));
+    }
+
+    /**
+     * CLONE
+     */
+    public RPoint2D clone() {
+        RPoint2D clone = null;
+        try {
+            clone = (RPoint2D) super.clone();
+
+        } catch (CloneNotSupportedException cns) {
+        }
+        return clone;
     }
 }

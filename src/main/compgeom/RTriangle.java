@@ -31,7 +31,10 @@ package compgeom;
 
 import compgeom.util.CGUtil;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -43,6 +46,11 @@ import java.util.*;
  * </p>
  */
 public class RTriangle implements RBoundSurface2D {
+
+    /**
+     *
+     */
+    private static final long serialVersionUID = 5619174712306683292L;
 
     /**
      * the first point of this triangle.
@@ -73,40 +81,34 @@ public class RTriangle implements RBoundSurface2D {
      * the line segment formed by points: {@link RTriangle#p3} <code>-></code> {@link RTriangle#p1}.
      */
     public final RLineSegment2D s3;
-
+    /**
+     * a pre calculated hash code
+     */
+    private final int hash;
     /**
      * maximum x value of the bounding box aligned with the x- and y-axis
      */
     private Rational maxX;
-
     /**
      * maximum y value of the bounding box aligned with the x- and y-axis
      */
     private Rational maxY;
-
     /**
      * minimum x value of the bounding box aligned with the x- and y-axis
      */
     private Rational minX;
-
     /**
      * minimum y value of the bounding box aligned with the x- and y-axis
      */
     private Rational minY;
-
     /**
      * a hash set of the points, used for equals(...) and hashCode()
      */
     private HashSet<RPoint2D> pointSet;
 
     /**
-     * a pre calculated hash code
-     */
-    private final int hash;
-
-    /**
      * Creates a new triangle given three points.
-     * 
+     *
      * @param a the first point of this triangle.
      * @param b the second point of this triangle.
      * @param c the third point of this triangle.
@@ -114,8 +116,8 @@ public class RTriangle implements RBoundSurface2D {
      *                                  and <code>c</code> are collinear.
      */
     public RTriangle(RPoint2D a, RPoint2D b, RPoint2D c) throws IllegalArgumentException {
-        if(CGUtil.collinear(a, b, c)) {
-            throw new IllegalArgumentException(a+", "+b+" and "+c+" are collinear.");
+        if (CGUtil.collinear(a, b, c)) {
+            throw new IllegalArgumentException(a + ", " + b + " and " + c + " are collinear.");
         }
 
         this.p1 = a;
@@ -144,19 +146,17 @@ public class RTriangle implements RBoundSurface2D {
      *
      * @param p the point to check if it's inside the boundaries of this triangle.
      * @return <code>true</code> iff <code>p</code> is inside of <code>this</code>
-     *         triangle.
+     * triangle.
      */
     public boolean contains(RPoint2D p) {
         return // true if 'p' lies on one of the four segments
-                (s1.contains(p) || s2.contains(p) || s3.contains(p))
-                        ||
+                (s1.contains(p) || s2.contains(p) || s3.contains(p)) ||
                         // ... or if all 'paths' a->b->p, form a left turn
-                        (CGUtil.formsLeftTurn(p1, p2, p) && CGUtil.formsLeftTurn(p2, p3, p)
-                                && CGUtil.formsLeftTurn(p3, p1, p))
-                        ||
+                        (CGUtil.formsLeftTurn(p1, p2, p) && CGUtil.formsLeftTurn(p2, p3, p) && CGUtil
+                                .formsLeftTurn(p3, p1, p)) ||
                         // ... or if all 'paths' a->b->p, form a right turn
-                        (CGUtil.formsRightTurn(p1, p2, p) && CGUtil.formsRightTurn(p2, p3, p)
-                                && CGUtil.formsRightTurn(p3, p1, p));
+                        (CGUtil.formsRightTurn(p1, p2, p) && CGUtil.formsRightTurn(p2, p3, p) && CGUtil
+                                .formsRightTurn(p3, p1, p));
     }
 
     /**
@@ -166,8 +166,8 @@ public class RTriangle implements RBoundSurface2D {
      *
      * @param o the other (possible) triangle.
      * @return <code>true</code> iff <code>o</code> is a <code>RTriangle</code>
-     *         and all points in <code>this</code> are also present in
-     *         <code>that</code> (the order of the points does not matter!).
+     * and all points in <code>this</code> are also present in
+     * <code>that</code> (the order of the points does not matter!).
      */
     @Override
     public boolean equals(Object o) {
@@ -220,8 +220,8 @@ public class RTriangle implements RBoundSurface2D {
      * <code>this</code> triangle.
      *
      * @return a pre calculated hash code based on the <code>hashCode()</code>
-     *         of a <code>HashSet</code> containing the three points of
-     *         <code>this</code> triangle.
+     * of a <code>HashSet</code> containing the three points of
+     * <code>this</code> triangle.
      */
     @Override
     public int hashCode() {
@@ -234,7 +234,7 @@ public class RTriangle implements RBoundSurface2D {
      * @return <code>true</code> iff all interior angles measure less than 90 degrees.
      */
     public boolean isAcuteAngled() {
-        if(this.isRightAngled()) {
+        if (this.isRightAngled()) {
             return false;
         }
 
@@ -252,29 +252,27 @@ public class RTriangle implements RBoundSurface2D {
     @Override
     public boolean isCongruentTo(RBoundSurface2D that) {
         List<RPoint2D> thatPoints = that.getPoints();
-        if(thatPoints.size() != 3) {
+        if (thatPoints.size() != 3) {
             return false;
         }
         List<RPoint2D> thisPoints = this.getPoints();
 
-        Map<Rational, Integer> thisDistances = CGUtil.getFrequencyMap(
-                new RLineSegment2D(thisPoints.get(0), thisPoints.get(1)).lengthSquared(),
-                new RLineSegment2D(thisPoints.get(1), thisPoints.get(2)).lengthSquared(),
-                new RLineSegment2D(thisPoints.get(2), thisPoints.get(0)).lengthSquared()
-        );
+        Map<Rational, Integer> thisDistances = CGUtil
+                .getFrequencyMap(new RLineSegment2D(thisPoints.get(0), thisPoints.get(1)).lengthSquared(),
+                                 new RLineSegment2D(thisPoints.get(1), thisPoints.get(2)).lengthSquared(),
+                                 new RLineSegment2D(thisPoints.get(2), thisPoints.get(0)).lengthSquared());
 
-        Map<Rational, Integer> thatDistances = CGUtil.getFrequencyMap(
-                new RLineSegment2D(thatPoints.get(0), thatPoints.get(1)).lengthSquared(),
-                new RLineSegment2D(thatPoints.get(1), thatPoints.get(2)).lengthSquared(),
-                new RLineSegment2D(thatPoints.get(2), thatPoints.get(0)).lengthSquared()
-        );
+        Map<Rational, Integer> thatDistances = CGUtil
+                .getFrequencyMap(new RLineSegment2D(thatPoints.get(0), thatPoints.get(1)).lengthSquared(),
+                                 new RLineSegment2D(thatPoints.get(1), thatPoints.get(2)).lengthSquared(),
+                                 new RLineSegment2D(thatPoints.get(2), thatPoints.get(0)).lengthSquared());
 
         return thisDistances.equals(thatDistances);
     }
-    
+
     /**
      * Returns <code>true</code> iff all sides have the same length.
-     * 
+     *
      * @return <code>true</code> iff all sides have the same length.
      */
     public boolean isEquilateral() {
@@ -308,7 +306,7 @@ public class RTriangle implements RBoundSurface2D {
 
     /**
      * Returns <code>true</code> iff one angle measures more than 90 degrees.
-     * 
+     *
      * @return <code>true</code> iff one angle measures more than 90 degrees.
      */
     public boolean isObtuseAngled() {
@@ -320,22 +318,21 @@ public class RTriangle implements RBoundSurface2D {
      * (a right angle).
      *
      * @return <code>true</code> iff one of its interior angles measures 90 degrees
-     *         (a right angle).
+     * (a right angle).
      */
     public boolean isRightAngled() {
         // If one of the lines is horizontal and one of them vertical, it's right-angled.
-        if((s1.line.isHorizontal() || s2.line.isHorizontal() || s3.line.isHorizontal()) &&
-                (s1.line.isVertical() || s2.line.isVertical() || s3.line.isVertical())) {
+        if ((s1.line.isHorizontal() || s2.line.isHorizontal() || s3.line.isHorizontal()) && (s1.line
+                .isVertical() || s2.line.isVertical() || s3.line.isVertical())) {
             return true;
         }
-        
+
         final Rational m1 = s1.line.slope;
         final Rational m2 = s2.line.slope;
         final Rational m3 = s3.line.slope;
 
-        return m1.multiply(m2).equals(Rational.MINUS_ONE) ||
-                m2.multiply(m3).equals(Rational.MINUS_ONE) ||
-                m3.multiply(m1).equals(Rational.MINUS_ONE);
+        return m1.multiply(m2).equals(Rational.MINUS_ONE) || m2.multiply(m3).equals(Rational.MINUS_ONE) || m3
+                .multiply(m1).equals(Rational.MINUS_ONE);
     }
 
     /**
@@ -349,7 +346,7 @@ public class RTriangle implements RBoundSurface2D {
         Rational l3 = s3.lengthSquared();
         return !l1.equals(l2) && !l1.equals(l3) && !l2.equals(l3);
     }
-    
+
     /**
      * Returns <code>true</code> if <code>side</code> is a side of this triangle.
      *

@@ -29,6 +29,8 @@
  */
 package compgeom;
 
+import java.io.Serializable;
+
 /**
  * <p>
  * An abstraction of a <b>r</b>ational, <b>c</b>omputational-<b>g</b>eometry
@@ -39,6 +41,6 @@ package compgeom;
  * Date: May 10, 2010
  * </p>
  */
-public interface RCGObject {
-    // TODO method to paint on a java.awt.Graphics and maybe a 'toLaTEXString()' method... 
+public interface RCGObject extends Serializable, Cloneable {
+
 }

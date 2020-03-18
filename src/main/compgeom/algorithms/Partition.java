@@ -32,7 +32,6 @@ package compgeom.algorithms;
 import compgeom.RPolygon2D;
 
 /**
- * TODO
  * <p>
  * Author: Bart Kiers, bart@big-o.nl <br />
  * Date: May 16, 2010

@@ -31,7 +31,9 @@ package compgeom;
 
 import compgeom.util.CGUtil;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
 
 /**
  * <p>
@@ -43,6 +45,11 @@ import java.util.*;
  * </p>
  */
 public final class RRectangle implements RBoundSurface2D {
+
+    /**
+     *
+     */
+    private static final long serialVersionUID = 4091210594466611660L;
 
     /**
      * the first point of this rectangle
@@ -87,36 +94,30 @@ public final class RRectangle implements RBoundSurface2D {
      * parallel to {@link RRectangle#s2}
      */
     public final RLineSegment2D s4;
-
-    /**
-     * maximum x value of the bounding box aligned with the x- and y-axis
-     */
-    private Rational maxX;
-
-    /**
-     * maximum y value of the bounding box aligned with the x- and y-axis
-     */
-    private Rational maxY;
-
-    /**
-     * minimum x value of the bounding box aligned with the x- and y-axis
-     */
-    private Rational minX;
-
-    /**
-     * minimum y value of the bounding box aligned with the x- and y-axis
-     */
-    private Rational minY;
-
     /**
      * a hash set of the points, used for equals(...) and hashCode()
      */
     private final HashSet<RPoint2D> pointSet;
-
     /**
      * a pre calculated hash code
      */
     private final int hash;
+    /**
+     * maximum x value of the bounding box aligned with the x- and y-axis
+     */
+    private Rational maxX;
+    /**
+     * maximum y value of the bounding box aligned with the x- and y-axis
+     */
+    private Rational maxY;
+    /**
+     * minimum x value of the bounding box aligned with the x- and y-axis
+     */
+    private Rational minX;
+    /**
+     * minimum y value of the bounding box aligned with the x- and y-axis
+     */
+    private Rational minY;
 
     /**
      * Constructs a rectangle made from four lines, where line <code>a</code>
@@ -213,19 +214,17 @@ public final class RRectangle implements RBoundSurface2D {
      *
      * @param p the point to check if it's inside the boundaries of this rectangle.
      * @return <code>true</code> iff <code>p</code> is inside of <code>this</code>
-     *         rectangle.
+     * rectangle.
      */
     public boolean contains(RPoint2D p) {
         return // true if 'p' lies on one of the four segments
-                (s1.contains(p) || s2.contains(p) || s3.contains(p) || s4.contains(p))
-                        ||
+                (s1.contains(p) || s2.contains(p) || s3.contains(p) || s4.contains(p)) ||
                         // ... or if all 'paths' a->b->p, form a left turn
-                        (CGUtil.formsLeftTurn(p1, p2, p) && CGUtil.formsLeftTurn(p2, p3, p)
-                                && CGUtil.formsLeftTurn(p3, p4, p) && CGUtil.formsLeftTurn(p4, p1, p))
-                        ||
+                        (CGUtil.formsLeftTurn(p1, p2, p) && CGUtil.formsLeftTurn(p2, p3, p) && CGUtil
+                                .formsLeftTurn(p3, p4, p) && CGUtil.formsLeftTurn(p4, p1, p)) ||
                         // ... or if all 'paths' a->b->p, form a right turn
-                        (CGUtil.formsRightTurn(p1, p2, p) && CGUtil.formsRightTurn(p2, p3, p)
-                                && CGUtil.formsRightTurn(p3, p4, p) && CGUtil.formsRightTurn(p4, p1, p));
+                        (CGUtil.formsRightTurn(p1, p2, p) && CGUtil.formsRightTurn(p2, p3, p) && CGUtil
+                                .formsRightTurn(p3, p4, p) && CGUtil.formsRightTurn(p4, p1, p));
     }
 
     /**
@@ -235,8 +234,8 @@ public final class RRectangle implements RBoundSurface2D {
      *
      * @param o the other rectangle.
      * @return <code>true</code> iff <code>o</code> is a <code>RRectangle</code>
-     *         and all points in <code>this</code> are also present in
-     *         <code>that</code> (the order of the points does not matter).
+     * and all points in <code>this</code> are also present in
+     * <code>that</code> (the order of the points does not matter).
      */
     @Override
     public boolean equals(Object o) {
@@ -278,8 +277,8 @@ public final class RRectangle implements RBoundSurface2D {
      * @param longSide if <code>true</code>, the longest side is returned,
      *                 else the shortest.
      * @return depending on the parameter <code>boolean longSide</code>,
-     *         the longest or shortest side from this rectangle. Note that both
-     *         side could be equal.
+     * the longest or shortest side from this rectangle. Note that both
+     * side could be equal.
      * @see compgeom.RLineSegment2D#lengthSquared()
      * @see #isSquare()
      */
@@ -295,8 +294,8 @@ public final class RRectangle implements RBoundSurface2D {
      * <code>this</code> rectangle.
      *
      * @return a pre calculated hash code based on the <code>hashCode()</code>
-     *         of a <code>HashSet</code> containing the four points of
-     *         <code>this</code> rectangle.
+     * of a <code>HashSet</code> containing the four points of
+     * <code>this</code> rectangle.
      */
     @Override
     public int hashCode() {
@@ -309,7 +308,7 @@ public final class RRectangle implements RBoundSurface2D {
     @Override
     public boolean isCongruentTo(RBoundSurface2D that) {
         List<RPoint2D> thatPoints = that.getPoints();
-        if(thatPoints.size() != 4) {
+        if (thatPoints.size() != 4) {
             return false;
         }
 
@@ -319,10 +318,9 @@ public final class RRectangle implements RBoundSurface2D {
         Rational thatA = new RLineSegment2D(thatPoints.get(0), thatPoints.get(1)).lengthSquared();
         Rational thatB = new RLineSegment2D(thatPoints.get(1), thatPoints.get(2)).lengthSquared();
 
-        return (thisA.equals(thatA) && thisB.equals(thatB)) ||
-                (thisA.equals(thatB) && thisB.equals(thatA));
+        return (thisA.equals(thatA) && thisB.equals(thatB)) || (thisA.equals(thatB) && thisB.equals(thatA));
     }
-    
+
     /**
      * Returns <code>true</code> if <code>side</code> is a side of this rectangle.
      *
@@ -382,12 +380,10 @@ public final class RRectangle implements RBoundSurface2D {
      */
     @Override
     public String toString() {
-        return String.format("p1: %s\np2: %s\n" +
-                "p3: %s\np4: %s\nline p1 -> p2: %s\nline p2 " +
-                "-> p3: %s\nline p3 -> p4: %s\nline p4 -> p1: %s\n" +
-                "area: +/- %.2f",
-                p1, p2, p3, p4, new RLine2D(p1, p2), new RLine2D(p2, p3),
-                new RLine2D(p3, p4), new RLine2D(p4, p1), area());
+        return String
+                .format("p1: %s\np2: %s\n" + "p3: %s\np4: %s\nline p1 -> p2: %s\nline p2 " + "-> p3: %s\nline p3 -> p4: %s\nline p4 -> p1: %s\n" + "area: +/- %.2f",
+                        p1, p2, p3, p4, new RLine2D(p1, p2), new RLine2D(p2, p3), new RLine2D(p3, p4),
+                        new RLine2D(p4, p1), area());
     }
 
     /**
@@ -401,8 +397,8 @@ public final class RRectangle implements RBoundSurface2D {
             throw new RuntimeException("Line segments s2 and s4 are not parallel.");
         }
         if (!s1.line.isPerpendicularTo(s2.line)) {
-            throw new RuntimeException("Line segments s1 and s3 are not " +
-                    "perpendicular to line segments s2 and s4.");
+            throw new RuntimeException(
+                    "Line segments s1 and s3 are not " + "perpendicular to line segments s2 and s4.");
         }
     }
 
